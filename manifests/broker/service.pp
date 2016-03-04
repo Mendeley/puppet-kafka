@@ -13,6 +13,12 @@ class kafka::broker::service {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
+  file { '/lib/systemd/system/kafka.service':
+    ensure => present,
+    mode => '0644',
+    content => template('kafka/kafka.service.erb'),
+  }
+
   file { '/etc/init.d/kafka':
     ensure  => present,
     mode    => '0755',
@@ -24,7 +30,10 @@ class kafka::broker::service {
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
-    require    => File['/etc/init.d/kafka'],
+    require    => [
+      File['/etc/init.d/kafka'],
+      File['/lib/systemd/system/kafka.service'],
+    ]
   }
 
 }
