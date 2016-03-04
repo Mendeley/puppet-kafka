@@ -25,7 +25,6 @@ class kafka::broker::service {
     hasstatus  => true,
     hasrestart => true,
     require    => [
-      File['/etc/init.d/kafka'],
       File['/lib/systemd/system/kafka.service'],
     ]
   }
